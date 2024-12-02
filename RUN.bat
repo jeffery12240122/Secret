@@ -1,9 +1,17 @@
 @echo off
-rem 執行 CMake 配置
-cmake -S . -B build
 
-rem 執行 CMake 編譯
-cmake --build build
+cmake -S . -B build -DCMAKE_VERBOSE_MAKEFILE:BOOL=ON
 
-rem 運行生成的可執行文件
-build\Debug\LCC.exe
+if %ERRORLEVEL% NEQ 0 (
+    echo "CMake configuration failed"
+    exit /b %ERRORLEVEL%
+)
+
+cmake --build build --verbose
+
+if %ERRORLEVEL% NEQ 0 (
+    echo "Build failed"
+    exit /b %ERRORLEVEL%
+)
+
+echo "Done"
