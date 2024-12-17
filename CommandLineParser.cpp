@@ -1,6 +1,7 @@
 #include "CommandLineParser.h"
 
 map<string, CommandType> commandMap = {
+    {"--help", CMD_HELP},
     {"--reptile", CMD_REPTILE}
 };
 
@@ -9,8 +10,10 @@ map<string, MainOptionType> mainOptionMap = {
 };
 
 map<string, OptionType> optionMap = {
-    {"--stock_id", OPT_STOCK_ID}
+    {"--stock_id", OPT_STOCK_ID},
+    {"--history", OPT_HISTORY}
 };
+
 CommandLineParser::CommandLineParser(int argc, char* argv[]) {
     bool hasCmd = false, hasMainOpt = false;
 
@@ -19,6 +22,10 @@ CommandLineParser::CommandLineParser(int argc, char* argv[]) {
 
         auto cmdIt = commandMap.find(arg);
         if (cmdIt != commandMap.end()) {
+            if (cmdIt->second == CMD_HELP) {
+                helpFlag = true; // 設置 helpFlag 為 true
+                continue;
+            }
             commands.insert(cmdIt->second);
             hasCmd = true;
             continue;
@@ -47,15 +54,14 @@ CommandLineParser::CommandLineParser(int argc, char* argv[]) {
         throw invalid_argument("Unknown argument: " + arg);
     }
 
-    if (!hasCmd) {
+    if (!hasCmd && !helpFlag) {
         throw invalid_argument("Error: Missing required command.");
     }
 
-    if (!hasMainOpt) {
+    if (!hasMainOpt && !helpFlag) {
         throw invalid_argument("Error: Missing required main option.");
     }
 }
-
 bool CommandLineParser::hasCommand(CommandType cmd) const {
     return commands.find(cmd) != commands.end();
 }

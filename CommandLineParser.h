@@ -5,6 +5,7 @@
 using namespace std;
 
 enum CommandType {
+    CMD_HELP,
     CMD_REPTILE,
     CMD_UNKNOWN
 };
@@ -16,6 +17,7 @@ enum MainOptionType {
 
 enum OptionType {
     OPT_STOCK_ID,
+    OPT_HISTORY,
     OPT_UNKNOWN
 };
 
@@ -30,10 +32,12 @@ public:
     bool hasMainOption(MainOptionType mainOpt) const;
     bool hasOption(OptionType opt) const;
     string getOption(OptionType opt) const;
+    bool hasHelp() const { return helpFlag; }
 
     set<CommandType> commands;
     MainOptionType mainOption = MAIN_UNKNOWN;
     map<OptionType, string> options;
+    bool helpFlag = false;
 };
 
 #endif COMMAND_LINE_PARSER_H

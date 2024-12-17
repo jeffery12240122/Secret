@@ -6,6 +6,8 @@
 #include <iostream>
 #include <set>
 #include <map>
+#include <sstream>
+
 using namespace std;
 
 class FetchException : public exception {
